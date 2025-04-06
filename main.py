@@ -47,7 +47,7 @@ def callback(ch, method, properties, body):
     global data
     data[message.get("tag")].append((message.get("id"),message.get("time_diff")))
 
-    if (int(message.get("id")) == 10):
+    if (int(message.get("id")) == 999):
         for k,v in data.items():
             # Open a text file in write mode
             with open(f'{k}.txt', 'w') as file:
