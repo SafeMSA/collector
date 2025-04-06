@@ -4,6 +4,7 @@ import time
 import json
 import os
 from datetime import datetime
+from collections import defaultdict
 
 # Constants
 RABBITMQ_HOST = 'localhost'
@@ -14,6 +15,8 @@ PASSWORD = 'mypassword'
 
 ids = []
 time_diffs = []
+tags = []
+data = defaultdict(list)
 
 # Connect to RabbitMQ and declare the necessary queues
 def connect_to_rabbitmq():
@@ -46,21 +49,27 @@ def callback(ch, method, properties, body):
     # Extract id and timestamp from the received message
     global ids
     global time_diffs
+    global tags
+    global data
 
     ids.append(message.get("id"))
     time_diffs.append(message.get("time_diff"))
+    tags.append()
+
+    data[message.get("tag")].append((message.get("id"),message.get("time_diff")))
 
     if (int(message.get("id")) == 10):
-        # Open a text file in write mode
-        with open('output.txt', 'w') as file:
-            # Write headers
-            file.write("ID,Time Difference\n")
-            
-            # Iterate through both lists and write each pair to the file
-            for i in range(len(ids)):
-                file.write(f"{ids[i]},{time_diffs[i]}\n")
+        for k,v in data.items:
+            # Open a text file in write mode
+            with open(f'{k}.txt', 'w') as file:
+                # Write headers
+                file.write("ID,Time Difference\n")
+                
+                # Iterate through both lists and write each pair to the file
+                for (id,td) in v:
+                    file.write(f"{id},{td}\n")
 
-        print("Data saved to output.txt")
+        print("Data saved to files")
     
     # Acknowledge the received message
     ch.basic_ack(delivery_tag=method.delivery_tag)
