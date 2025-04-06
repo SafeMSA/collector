@@ -13,9 +13,6 @@ SUBSCRIBER_QUEUE = 'response_queue'  # Name of the queue to send the response to
 USER = 'myuser'
 PASSWORD = 'mypassword'
 
-ids = []
-time_diffs = []
-tags = []
 data = defaultdict(list)
 
 # Connect to RabbitMQ and declare the necessary queues
@@ -47,15 +44,7 @@ def callback(ch, method, properties, body):
     print(f"Received: {message}")
     
     # Extract id and timestamp from the received message
-    global ids
-    global time_diffs
-    global tags
     global data
-
-    ids.append(message.get("id"))
-    time_diffs.append(message.get("time_diff"))
-    tags.append()
-
     data[message.get("tag")].append((message.get("id"),message.get("time_diff")))
 
     if (int(message.get("id")) == 10):
