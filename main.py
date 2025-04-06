@@ -48,7 +48,7 @@ def callback(ch, method, properties, body):
     data[message.get("tag")].append((message.get("id"),message.get("time_diff")))
 
     if (int(message.get("id")) == 10):
-        for k,v in data.items:
+        for k,v in data.items():
             # Open a text file in write mode
             with open(f'{k}.txt', 'w') as file:
                 # Write headers
