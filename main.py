@@ -43,11 +43,11 @@ def tag_callback(ch, method, properties, body):
     message = json.loads(body.decode())  # Parse incoming JSON message
     print(f"Received: {message}")
 
-    with open(f"{message.get("tag")}.txt", 'a') as file:
+    with open(f'{message.get("tag")}.txt', 'a') as file:
         file.seek(0, 2)
         if (file.tell() == 0):
             file.write("Time stamp,Time to arrive\n")
-        file.write(f"{message.get("time_sent")}, {message.get("time_diff")}")
+        file.write(f'{message.get("time_sent")}, {message.get("time_diff")}')
     
     # Acknowledge the received message
     ch.basic_ack(delivery_tag=method.delivery_tag)
@@ -60,7 +60,7 @@ def evac_callback(ch, method, properties, body):
         file.seek(0, 2)
         if (file.tell() == 0):
             file.write("Time stamp, Status")
-        file.write(f"{message.get("time_sent")}, {message.get("status")}")
+        file.write(f'{message.get("time_sent")}, {message.get("status")}')
 
 def main():
     while True:
