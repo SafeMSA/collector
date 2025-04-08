@@ -59,8 +59,8 @@ def evac_callback(ch, method, properties, body):
     with open(f'{message.get("name")}.txt', 'a') as file:
         file.seek(0, 2)
         if (file.tell() == 0):
-            file.write("Time stamp, Status\n")
-        file.write(f'{message.get("time_sent")}, {message.get("status")}\n')
+            file.write("Time stamp, State\n")
+        file.write(f'{message.get("time_sent")}, {message.get("state")}\n')
 
 def main():
     while True:
