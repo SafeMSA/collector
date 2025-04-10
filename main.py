@@ -41,7 +41,7 @@ tot_tags = 1
 tag_dic = {}
 # Callback to handle incoming messages
 def tag_callback(ch, method, properties, body):
-    global tag_dic
+    global tag_dic, tot_tags
     message = json.loads(body.decode())  # Parse incoming JSON message
     print(f"Received: {message}")
 
