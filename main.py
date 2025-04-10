@@ -47,7 +47,7 @@ def tag_callback(ch, method, properties, body):
         file.seek(0, 2)
         if (file.tell() == 0):
             file.write("Time, Time to arrive, ID\n")
-        file.write(f'{datetime.fromisoformat(message.get("time_sent")).strftime("%H:%M:%S")}, {message.get("time_diff")}, {message.get("id")}\n')
+        file.write(f'{datetime.fromisoformat(message.get("time_sent")).strftime("%H:%M:%S")}, {2 + float(message.get("time_diff"))}, {message.get("id")}\n')
     
     # Acknowledge the received message
     ch.basic_ack(delivery_tag=method.delivery_tag)
