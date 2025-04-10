@@ -47,7 +47,7 @@ def tag_callback(ch, method, properties, body):
         file.seek(0, 2)
         if (file.tell() == 0):
             file.write("Time, Time to arrive, ID\n")
-        file.write(f'{message.get("time_sent")}, {message.get("time_diff")}, {message.get("id")}\n')
+        file.write(f'{datetime.fromisoformat(message.get("time_sent")).strftime("%H:%M:%S")[:-7]}, {message.get("time_diff")}, {message.get("id")}\n')
     
     # Acknowledge the received message
     ch.basic_ack(delivery_tag=method.delivery_tag)
@@ -60,7 +60,7 @@ def evac_callback(ch, method, properties, body):
         file.seek(0, 2)
         if (file.tell() == 0):
             file.write("Time, State\n")
-        file.write(f'{message.get("time_sent")}, {message.get("state")}\n')
+        file.write(f'{datetime.fromisoformat(message.get("time_sent")).strftime("%H:%M:%S")[:-7]}, {message.get("state")}\n')
 
 def main():
     while True:
