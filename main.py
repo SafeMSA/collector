@@ -37,13 +37,19 @@ def connect_to_rabbitmq():
         except (pika.exceptions.AMQPConnectionError, pika.exceptions.ChannelClosedByBroker) as error:
             print(f"Error connecting to RabbitMQ: {error}. Retrying in 5 seconds...")
             time.sleep(5)
-
+tot_tags = 1
+tag_dic = {}
 # Callback to handle incoming messages
 def tag_callback(ch, method, properties, body):
+    global tag_dic
     message = json.loads(body.decode())  # Parse incoming JSON message
     print(f"Received: {message}")
 
-    with open(f'{message.get("tag")}.txt', 'a') as file:
+    if message.get("tag") not in tag_dic:
+        tag_dic[message.get("tag")] = f"tag{tot_tags}"
+        tot_tags += 1
+
+    with open(f'results/{tag_dic[message.get("tag")]}.txt', 'a') as file:
         file.seek(0, 2)
         if (file.tell() == 0):
             file.write("Time, Time to arrive, ID\n")
@@ -56,11 +62,12 @@ def evac_callback(ch, method, properties, body):
     message = json.loads(body.decode())  # Parse incoming JSON message
     print(f"Received: {message}")
 
-    with open(f'{message.get("name")}.txt', 'a') as file:
-        file.seek(0, 2)
-        if (file.tell() == 0):
-            file.write("Time, State\n")
-        file.write(f'{datetime.fromisoformat(message.get("time_sent")).strftime("%H:%M:%S")}, {message.get("state")}\n')
+    if message.get("state") == "Down" or message.get("state") == "Up":
+        with open(f'{message.get("name")}.txt', 'a') as file:
+            file.seek(0, 2)
+            if (file.tell() == 0):
+                file.write("Time, State\n")
+            file.write(f'{datetime.fromisoformat(message.get("time_sent")).strftime("%H:%M:%S")}, {message.get("state")}\n')
 
 def main():
     while True:
