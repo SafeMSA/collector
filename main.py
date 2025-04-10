@@ -49,7 +49,7 @@ def tag_callback(ch, method, properties, body):
         tag_dic[message.get("tag")] = f"tag{tot_tags}"
         tot_tags += 1
 
-    with open(f'results/{tag_dic[message.get("tag")]}.txt', 'a') as file:
+    with open(f'{tag_dic[message.get("tag")]}.txt', 'a') as file:
         file.seek(0, 2)
         if (file.tell() == 0):
             file.write("Time, Time to arrive, ID\n")
